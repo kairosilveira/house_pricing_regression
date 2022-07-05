@@ -1,6 +1,6 @@
 # House Pricing Regression
 
-In this project a create a model to predict house prices using machine learning. A lot of steps of a data science used, such as:
+In this project a create a model to predict house prices using machine learning. A lot of steps of a data science were applied, such as:
 
 - Business Understanding
   - Understand what is the company's demand
