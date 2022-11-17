@@ -95,7 +95,7 @@ class RegressionModel:
         return X_train, X_test, y_train, y_test
 
 
-    def remov_outliers(self, x_raw, y_raw, whis, cols=['bedrooms', 'bathrooms', 'sqft_living', 'sqft_lot', 
+    def remov_outliers_iqr(self, x_raw, y_raw, whis, cols=['bedrooms', 'bathrooms', 'sqft_living', 'sqft_lot', 
             'floors', 'sqft_above','sqft_basement', 'lat', 'long', 
             'sqft_living15', 'sqft_lot15','yr_no_renov'] ):
         '''Remove outliers using IQR'''
@@ -119,7 +119,7 @@ class RegressionModel:
         df = self.create_yr_no_renovated(df)
         df = self.remov_recommended_houses(df)
         df = self.remov_unimportant_cols(df)
-        
+
         return df
 
 
@@ -141,62 +141,32 @@ class RegressionModel:
         return metrics
 
 
-    def train(self, X_train, y_train):
-        '''train all the models and the ensemble model'''
+    def train(self, X_train, y_train, tuning_hp = True , params = None ):
+        '''train the model with the best parameters'''
 
-        #randomForest
-        params = {
-            "n_estimators": [50, 200, 300, 400],
-            "max_depth":[ 5, 10, 20, 30, None],
-        }
-        forest_model = RandomForestRegressor(random_state = 42)
-        self.forest_model_tuned, self.best_params_forest = self.get_tuned_model(
-            X_train, y_train,forest_model, params)
+        if tuning_hp:
+            if params == None:
+                params = {
+                    "n_estimators": [100, 150, 200, 250],
+                    "learning_rate":[0.001, 0.01, 0.1],
+                    "max_depth":[5, 7, None]
+                }
 
-        #adaBoost
-        params = {
-            "n_estimators": [50, 100, 150, 200],
-            "learning_rate":[ 0.0001, 0.001, 0.01, 0.1],
-            "loss":["linear", "square", "exponential"]
-        }
-        ada_model = AdaBoostRegressor(DecisionTreeRegressor(),learning_rate=0.01, random_state = 42)
-        self.ada_model_tuned, self.best_params_ada = self.get_tuned_model(
-            X_train, y_train,ada_model, params)
+            gbr_model = GradientBoostingRegressor(random_state = 42)
+            self.gbr_model, self.params_gbr = self.get_tuned_model(
+                X_train, y_train,gbr_model, params)
+        elif params==None:
+            self.gbr_model = GradientBoostingRegressor(random_state = 42)
+            self.gbr_model.fit(X_train, y_train)
+            self.params_gbr = self.gbr_model.get_params()
+        else:
+            self.gbr_model = GradientBoostingRegressor(random_state = 42, **params)
+            self.gbr_model.fit(X_train, y_train)   
+            self.params_gbr = self.gbr_model.get_params()         
 
-        #gradientBoosting
-        params = {
-            "n_estimators": [100, 150, 200, 250],
-            "learning_rate":[0.001, 0.01, 0.1],
-            "max_depth":[5, 7, None]
-        }
-        gbr_model = GradientBoostingRegressor(random_state = 42)
-        self.gbr_model_tuned, self.best_params_gbr = self.get_tuned_model(
-            X_train, y_train,gbr_model, params)
-        
-        #xbg
-        params = {
-            "n_estimators": [50, 100, 150, 200],
-            "learning_rate":[ 0.0001, 0.001, 0.01, 0.1, 1],
-            "booster": ["gbtree", "gblinear", "dart"]
-        }
-        xgb_model = XGBRegressor(random_state = 42)
-        self.xgb_model_tuned, self.best_params_xgb = self.get_tuned_model(
-            X_train, y_train,xgb_model, params)
+       
 
-        #ensemble (final model)
-        models = [
-            ("forest", self.forest_model_tuned),
-            ("ada", self.ada_model_tuned), 
-            ("gbr", self.gbr_model_tuned),
-            ("xgb", self.xgb_model_tuned)
-            ]
-            
-        ensemble_model = VotingRegressor(models, n_jobs=-1)
-        self.ensemble_model = ensemble_model.fit(X_train, y_train)
-
-
-
-    def train_and_save_mlflow_model(self):
+    def train_and_save_mlflow_model(self, tuning_hp = True , params = None):
         '''Track the model with MLFlow'''
 
         mlflow.set_experiment(self.mlflow_experiment_name)
@@ -204,28 +174,24 @@ class RegressionModel:
         df = self.get_data()
         df = self.prepare_data(df)
         X_train, X_test, y_train, y_test = self.split_data(df)
-        self.train(X_train, y_train)
-
-        #Log barplots as artifacts to show feature importance   
-        models = [
-            ("RandomForest", self.forest_model_tuned),
-            ("AdaBoost", self.ada_model_tuned), 
-            ("GradientBoosting", self.gbr_model_tuned),
-            ("XGB", self.xgb_model_tuned)
-            ]
-
-        for name, model in models:
-            fi = model.feature_importances_
-            plt.figure(figsize=(17,8))
-            sns.barplot(x=model.feature_names_in_, y = fi)
-            plt.savefig("mlruns/feature_importance_"+name+".png")
-            mlflow.log_artifact("mlruns/feature_importance_"+name+".png")
-            plt.close()
+        print(X_train.shape)
+        print(y_train.shape)
+        print(y_test.shape)
+        print(X_test.shape)
+        self.train(X_train, y_train,tuning_hp, params)
+      
+        #Log barplot as artifact to save the feature importance plot   
+        fi = self.gbr_model.feature_importances_
+        plt.figure(figsize=(17,6))
+        sns.barplot(x=self.gbr_model.feature_names_in_, y = fi)
+        plt.savefig("mlruns/feature_importance.png")
+        mlflow.log_artifact("mlruns/feature_importance.png")
+        plt.close()
 
         #logging metrics
-        yhat_test = self.ensemble_model.predict(X_test)
+        yhat_test = self.gbr_model.predict(X_test)
         self.test_metrics = self.get_mae_r2_metrics(yhat=yhat_test, y=y_test)
-        yhat_train = self.ensemble_model.predict(X_train)
+        yhat_train = self.gbr_model.predict(X_train)
         self.train_metrics = self.get_mae_r2_metrics(yhat=yhat_train, y=y_train)
 
         mlflow.log_metric("MSE test",self.test_metrics["MAE"])
@@ -234,18 +200,17 @@ class RegressionModel:
         mlflow.log_metric("R2 train",self.train_metrics["R2"])
 
         #logging parameters and model
-        params = {
-            "RandomForest": self.best_params_forest,
-            "AdaBoost": self.best_params_ada, 
-            "GradientBoosting": self.best_params_gbr,
-            "XGB": self.best_params_xgb
-        }
+        params = self.params_gbr
         mlflow.log_params(params)
         signature=infer_signature(X_test,yhat_test)
-        mlflow.sklearn.log_model(self.ensemble_model, "house_price_regression", signature=signature)
+        mlflow.sklearn.log_model(self.gbr_model, "house_price_regression", signature=signature)
 
         mlflow.end_run()
 
 if __name__ == "__main__":
     trainer = RegressionModel("House Pricing Regression")
-    trainer.train_and_save_mlflow_model()
+    params = {'learning_rate': 0.1, 'max_depth': 7, 'n_estimators': 250}
+    trainer.train_and_save_mlflow_model(tuning_hp=False, params=params)
+    print(trainer.test_metrics)
+    print(trainer.train_metrics)
+
