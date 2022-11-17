@@ -174,10 +174,6 @@ class RegressionModel:
         df = self.get_data()
         df = self.prepare_data(df)
         X_train, X_test, y_train, y_test = self.split_data(df)
-        print(X_train.shape)
-        print(y_train.shape)
-        print(y_test.shape)
-        print(X_test.shape)
         self.train(X_train, y_train,tuning_hp, params)
       
         #Log barplot as artifact to save the feature importance plot   
@@ -209,8 +205,7 @@ class RegressionModel:
 
 if __name__ == "__main__":
     trainer = RegressionModel("House Pricing Regression")
-    params = {'learning_rate': 0.1, 'max_depth': 7, 'n_estimators': 250}
-    trainer.train_and_save_mlflow_model(tuning_hp=False, params=params)
-    print(trainer.test_metrics)
-    print(trainer.train_metrics)
+    trainer.train_and_save_mlflow_model()
+    print("test metrics:", trainer.test_metrics)
+    print("train metrics:",trainer.train_metrics)
 
