@@ -207,8 +207,7 @@ class RegressionModel:
 
 if __name__ == "__main__":
     trainer = RegressionModel("House Pricing Regression")
-    params = {'learning_rate': 0.1, 'max_depth': 7, 'n_estimators': 250}
-    trainer.train_and_save_mlflow_model(tuning_hp=False, params = params )
+    trainer.train_and_save_mlflow_model()
     print("test metrics:", trainer.test_metrics)
     print("train metrics:",trainer.train_metrics)
 
