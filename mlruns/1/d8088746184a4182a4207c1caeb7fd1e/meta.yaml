@@ -1,0 +1,15 @@
+artifact_uri: file:///home/kairosilveira/projects/portifolio/house-pricing-regression/mlruns/1/d8088746184a4182a4207c1caeb7fd1e/artifacts
+end_time: 1668813174673
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: d8088746184a4182a4207c1caeb7fd1e
+run_uuid: d8088746184a4182a4207c1caeb7fd1e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1668813156193
+status: 3
+tags: []
+user_id: kairosilveira
