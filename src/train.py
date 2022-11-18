@@ -22,7 +22,7 @@ from xgboost import XGBRegressor
 
 class RegressionModel:
 
-    def __init__(self, mlflow_experiment_name) -> None:
+    def __init__(self, mlflow_experiment_name = "House Pricing Regression") -> None:
         self.mlflow_experiment_name = mlflow_experiment_name 
     
 
@@ -43,12 +43,13 @@ class RegressionModel:
         return df
 
 
-    def remov_unimportant_cols(self, df_raw):
+    def remov_unimportant_cols(self, df_raw, unimportant_cols = 
+    ["id", "date", "zipcode", "yr_built", "yr_renovated"]):
         '''Remove unimportant columns for modeling from the dataFrame, if they are present'''
         
         df = df_raw.copy()
         df_cols = list(df.columns)
-        unimportant_cols = ["id", "date", "zipcode", "yr_built", "yr_renovated"]
+        
         cols_are_in_df = all(item in df_cols for item in unimportant_cols)
 
         if not cols_are_in_df:
