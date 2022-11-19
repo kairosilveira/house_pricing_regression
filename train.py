@@ -17,7 +17,6 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 
-from xgboost import XGBRegressor
 
 
 class RegressionModel:
