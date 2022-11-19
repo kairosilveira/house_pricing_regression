@@ -17,6 +17,7 @@ In this file is the flask code for the API to predict prices, using the model lo
 First, to run the webapp locally you are going to have to clone the repository:
 
     gh repo clone kairosilveira/house-pricing-regression
+    cd house-pricing-regression/
 
 Then, create and activate the virtual environment and install the dependencies(make sure eu you have python3 installed):
 
