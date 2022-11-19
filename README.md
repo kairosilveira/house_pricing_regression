@@ -23,9 +23,11 @@ Then, create and activate the virtual environment and install the dependencies(m
     python -m venv venv
 
 Activate venv on linux
+
     source venv/bin/activate 
 
 Activate venv on windows
+
     venv/Scripts/activate 
 
     python -m pip install --upgrade pip
