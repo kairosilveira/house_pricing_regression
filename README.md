@@ -49,3 +49,25 @@ Now you can use the post method to make predictions using your local server addi
 
 
 [here]: https://www.kaggle.com/harlfoxem/housesalesprediction
+
+{"data":[{
+  "date":"2014-07-17",
+  "bedrooms":2,
+  "bathrooms":1.0,
+  "sqft_living":770,
+  "sqft_lot":17334,
+  "floors":1.0,
+  "waterfront":0,
+  "view":0,
+  "condition":3,
+  "grade":7,
+  "sqft_above":770,
+  "sqft_basement":0,
+  "yr_built":1978,
+  "yr_renovated":0,
+  "lat":47.2997,
+  "long":-122.269,
+  "sqft_living15":1480,
+  "sqft_lot15":17334
+  }]
+}
