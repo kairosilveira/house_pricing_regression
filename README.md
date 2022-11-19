@@ -21,9 +21,15 @@ First, to run the webapp locally you are going to have to clone the repository:
 Then, create and activate the virtual environment and install the dependencies(make sure eu you have python3 installed):
 
     python -m venv venv
-    source venv/bin/activate #for linux
-    venv/Scripts/activate #fow windows
+
+Activate venv on linux
+    source venv/bin/activate 
+
+Activate venv on windows
+    venv/Scripts/activate 
+
     python -m pip install --upgrade pip
+
     pip install -r requirements.txt
 
 After installation is done, you can start the flask aplication running the app.py file
