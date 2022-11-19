@@ -6,9 +6,8 @@ import mlflow
 
 mlflow.set_experiment("House Pricing Regression")
 last_run=dict(mlflow.search_runs().sort_values(by='start_time',ascending=False).iloc[0])
-artifact_uri=last_run['artifact_uri']
-print(artifact_uri)
-model=mlflow.sklearn.load_model(artifact_uri+'/house_price_regression')
+last_model_uri = "mlruns/"+last_run['experiment_id']+"/"+ last_run["run_id"] +'/artifacts/house_price_regression'
+model=mlflow.sklearn.load_model(last_model_uri)
 
 app = Flask(__name__)
 

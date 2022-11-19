@@ -199,7 +199,7 @@ class RegressionModel:
         params = self.params_gbr
         mlflow.log_params(params)
         signature=infer_signature(X_test,yhat_test)
-        mlflow.sklearn.log_model(self.gbr_model, "house_price_regression", signature=signature)
+        mlflow.sklearn.log_model(self.gbr_model, "house_price_regression", signature=signature, )
 
         mlflow.end_run()
     
