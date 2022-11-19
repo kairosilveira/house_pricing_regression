@@ -30,6 +30,8 @@ Activate venv on windows
 
     venv/Scripts/activate 
 
+Install dependencies
+
     python -m pip install --upgrade pip
 
     pip install -r requirements.txt
@@ -40,7 +42,7 @@ After installation is done, you can start the flask aplication running the app.p
 
 Now you can use the post method to make predictions using your local server addind /predict to the end point, here is an example using thunder:
 
-![alt text](tests/API_test_thunder.png.png)
+![alt text](tests/API_test_thunder.png)
 
 
 
