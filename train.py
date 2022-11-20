@@ -22,6 +22,9 @@ class RegressionModel:
        
 
     def get_data_path(self, data_file):
+        if not isinstance(data_file, str):
+            raise ValueError("data_file must be a string")
+
         data_path = os.path.join(
                         os.path.join(
                             os.path.abspath(""),"data"),
@@ -29,10 +32,10 @@ class RegressionModel:
         return data_path
 
 
-    def get_data(self):
+    def get_data(self, data_file = "kc_house_data.csv"):
         '''read the data into a dataFrame'''
 
-        data_path = self.get_data_path("kc_house_data.csv")
+        data_path = self.get_data_path(data_file)
         df = pd.read_csv(data_path)
         return df
 
@@ -62,7 +65,7 @@ class RegressionModel:
 
 
     def create_yr_no_renovated(self, df_raw): #improve this method later
-        '''create a new feature "yr_no_renovated"'''
+        '''create a new feature "yr_no_renovated" using "date" yr_build and yr_renovated'''
 
         df=df_raw.copy()
         df["date"] = pd.to_datetime(df["date"], yearfirst = True)

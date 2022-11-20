@@ -1,1 +1,4 @@
 /venv
+house_price_regression/__pycache__
+__pycache__
+.pytest_cache
