@@ -1,5 +1,7 @@
 from train import RegressionModel
 from flask import Flask,request
+from flask_cors import CORS, cross_origin
+
 import pandas as pd
 import mlflow
 
@@ -9,6 +11,8 @@ last_model_uri = "mlruns/"+last_run['experiment_id']+"/"+ last_run["run_id"] +'/
 model=mlflow.sklearn.load_model(last_model_uri)
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route("/predict", methods = ["POST"])
 def predict():
