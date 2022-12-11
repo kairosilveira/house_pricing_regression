@@ -1,4 +1,4 @@
-from house_pricing_regression.train import RegressionModel
+from house_pricing_regression.src.train import RegressionModel
 import pytest
 import pandas as pd
 import os
