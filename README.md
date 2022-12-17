@@ -39,7 +39,7 @@ Install dependencies
 
 After installation is done, you can start the flask aplication running the app.py file
 
-    python3 app.py
+    python3 src/app.py
 
 Now you can use the post method to make predictions using your local server adding /predict to the endpoint, here is an example using thunder:
 
