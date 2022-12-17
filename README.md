@@ -34,12 +34,12 @@ Activate venv on windows
 Install dependencies
 
     python -m pip install --upgrade pip
-
     pip install -r requirements.txt
+
 
 After installation is done, you can start the flask aplication running the app.py file
 
-    python3 src/app.py
+    gunicorn --chdir src app:app
 
 Now you can use the post method to make predictions using your local server adding /predict to the endpoint, here is an example using thunder:
 
@@ -47,9 +47,6 @@ Now you can use the post method to make predictions using your local server addi
 
 
 
-
-
-[here]: https://www.kaggle.com/harlfoxem/housesalesprediction
 
 {"data":[{
   "date":"2014-07-17",
@@ -72,3 +69,8 @@ Now you can use the post method to make predictions using your local server addi
   "sqft_lot15":17334
   }]
 }
+
+
+
+
+[here]: https://www.kaggle.com/harlfoxem/housesalesprediction
