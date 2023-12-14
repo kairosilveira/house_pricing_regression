@@ -46,7 +46,6 @@ scipy==1.9.3
 seaborn==0.12.1
 shap==0.41.0
 six==1.16.0
-sklearn==0.0.post1
 slicer==0.0.7
 smmap==5.0.0
 SQLAlchemy==1.4.45
