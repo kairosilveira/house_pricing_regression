@@ -1,6 +1,6 @@
 # House Pricing Regression
 
-This is a repository of a full datascience project focused on MLOps: Deployment, unit tests, OOP, MLFlow. The goal is to predict prices of houses based on the Kings County dataset (avaliable [here]).
+This is a repository of a full datascience project focused on a simple ML service: Deployment, unit tests, OOP, MLFlow. The goal is to predict prices of houses based on the Kings County dataset (avaliable [here]).
 
  
 
